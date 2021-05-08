@@ -7,7 +7,7 @@ Project to extract and analyse data after ORM executions.
 This part will generate a csv file containing the domain id, the domain name, the number of cookies not interacting
 with the website, the number of cookies trying to accept cookies and if we were successful on clicking the button.
 
-| domain_ID | domain_name | cookies_default | cookies_accepted | clicked |
+| domain_ID | domain_name | cookies_default | cookies_accepted | clicked | 
 |-----------|-------------|-----------------|------------------|---------|
 |           |             |                 |                  |         |
 |           |             |                 |                  |         |
@@ -47,3 +47,22 @@ Currently, 3 charts are generated:
 - Pie chart with the percentage of pages where cookies were accepted.
 - Pie chart with the percentage of pages with the same number cookies accepting and not interacting.
 - Bar plot with the overheating of cookies accepting versus not interacting.
+
+
+## Generating plots
+
+This part of the project will read the previously generated csv file and generate meaningful statistics using python language.
+
+## Executing
+
+To generate the plots execute `python3 plotsGenerator.py`. 
+
+### Charts generated 
+
+Currently, 5 charts are generated:
+
+- Pie chart with the percentage of pages where cookies were accepted.
+- Pie chart with the percentage of pages with the same number cookies accepting and not interacting.
+- Bar plot with the overheating of cookies accepting versus not interacting.
+- Bar plot with the percentatge of NOT accepted cookies versus countries of each domain.
+- Bar plot with the overheating of ninja cookies plugin activated versus not interacting.
