@@ -224,8 +224,9 @@ def cdf(data, data2):
     cdf2 = np.cumsum(counts2)
 
     # Plot the cdf
-    plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
-    plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    blueLine, = plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
+    redLine, = plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    plt.legend([blueLine,redLine],['cookies Accepted', 'cookies Default'])
     plt.ylim((0,1))
     plt.xlabel('Number of cookies')
     plt.title("CDF cookies accepted vs default")
@@ -242,8 +243,8 @@ with open('cookies_report.csv', newline='') as csvfile:
     first = True
     for row in spamreader:
         if not first:
-            data.append(row[5])
-            data2.append(row[2])
+            data.append(row[5]) #Cookies accepted column
+            data2.append(row[2]) #Default cookies column
         first = False
 
 data_array = np.asarray(data).astype(int)
@@ -276,8 +277,9 @@ def cdf(data, data2):
     cdf2 = np.cumsum(counts2)
 
     # Plot the cdf
-    plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
-    plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    blueLine, = plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
+    redLine, = plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    plt.legend([blueLine,redLine],['cookies Ninja', 'cookies Default'])
     plt.ylim((0,1))
     plt.xlabel('Number of cookies')
     plt.title("CDF cookies Ninja Plugin vs Default")
@@ -294,8 +296,8 @@ with open('cookies_report.csv', newline='') as csvfile:
     first = True
     for row in spamreader:
         if not first:
-            data.append(row[4])
-            data2.append(row[2])
+            data.append(row[4]) #Ninja cookies column
+            data2.append(row[2]) #Default cookies column
         first = False
 
 data_array = np.asarray(data).astype(int)
