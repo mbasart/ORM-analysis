@@ -1,6 +1,8 @@
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+from pylab import *
+import math
 
 #### Data Reading ####
 
@@ -144,6 +146,31 @@ with open("cookies_report.csv") as csv_file:
 with open("cookies_report.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
 
+    #### Pie chart same vs more cookies ####
+    moreCookies = 0
+    sameCookies = 0
+
+    # Column 2 is cookies_default, column 4 is cookies_accepted
+    for row in csv_reader:
+        if row[2] == row[4] or row[4] < row[2]:
+            sameCookies += 1
+        elif row[4] > row[2]:
+            moreCookies += 1
+
+    print("moreCookies: ", moreCookies)
+    print("sameCookies: ", sameCookies)
+
+    cookies = [moreCookies, sameCookies]
+    nombres = ["More cookies", "Same Cookies"]
+    plt.pie(cookies, labels=nombres, autopct="%0.1f %%")
+    plt.axis("equal")
+    plt.title("Domains with the same cookies case Ninja Cookie plugin")
+    plt.show()
+
+
+with open("cookies_report.csv") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+
     #### How many cookies by saying yes ####
     ninja = 0
     notInteract = 0
@@ -171,3 +198,107 @@ with open("cookies_report.csv") as csv_file:
     plt.title('Total of cookies with ninja plugin or not interacting')
 
     plt.show()
+
+
+#CDF accept cookies vs default
+def cdf(data, data2):
+
+    data_size=len(data)
+    data_size2=len(data2)
+
+    # Set bins edges
+    data_set=sorted(set(data))
+    data_set2=sorted(set(data2))
+    bins=np.append(data_set, data_set[-1]+1)
+    bins2=np.append(data_set2, data_set2[-1]+1)
+
+    # Use the histogram function to bin the data
+    counts, bin_edges = np.histogram(data, bins=bins, density=False)
+    counts2, bin_edges2 = np.histogram(data2, bins=bins2, density=False)
+
+    counts=counts.astype(float)/data_size
+    counts2=counts2.astype(float)/data_size2
+
+    # Find the cdf
+    cdf = np.cumsum(counts)
+    cdf2 = np.cumsum(counts2)
+
+    # Plot the cdf
+    plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
+    plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    plt.ylim((0,1))
+    plt.xlabel('Number of cookies')
+    plt.title("CDF cookies accepted vs default")
+    plt.grid(True)
+
+    plt.show()
+
+print("resource_id,num_fonts")
+data = []
+data2 = []
+
+with open('cookies_report.csv', newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=',')
+    first = True
+    for row in spamreader:
+        if not first:
+            data.append(row[5])
+            data2.append(row[2])
+        first = False
+
+data_array = np.asarray(data).astype(int)
+data_array2 = np.asarray(data2).astype(int)
+
+cdf(data_array, data_array2)
+
+
+#CDF ninja cookies vs default
+def cdf(data, data2):
+
+    data_size=len(data)
+    data_size2=len(data2)
+
+    # Set bins edges
+    data_set=sorted(set(data))
+    data_set2=sorted(set(data2))
+    bins=np.append(data_set, data_set[-1]+1)
+    bins2=np.append(data_set2, data_set2[-1]+1)
+
+    # Use the histogram function to bin the data
+    counts, bin_edges = np.histogram(data, bins=bins, density=False)
+    counts2, bin_edges2 = np.histogram(data2, bins=bins2, density=False)
+
+    counts=counts.astype(float)/data_size
+    counts2=counts2.astype(float)/data_size2
+
+    # Find the cdf
+    cdf = np.cumsum(counts)
+    cdf2 = np.cumsum(counts2)
+
+    # Plot the cdf
+    plt.plot(bin_edges[0:-1], cdf,linestyle='--', marker="o", color='b')
+    plt.plot(bin_edges2[0:-1], cdf2,linestyle='--', marker="o", color='r')
+    plt.ylim((0,1))
+    plt.xlabel('Number of cookies')
+    plt.title("CDF cookies Ninja Plugin vs Default")
+    plt.grid(True)
+
+    plt.show()
+
+print("resource_id,num_fonts")
+data = []
+data2 = []
+
+with open('cookies_report.csv', newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=',')
+    first = True
+    for row in spamreader:
+        if not first:
+            data.append(row[4])
+            data2.append(row[2])
+        first = False
+
+data_array = np.asarray(data).astype(int)
+data_array2 = np.asarray(data2).astype(int)
+
+cdf(data_array, data_array2)
