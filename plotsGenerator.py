@@ -149,19 +149,23 @@ with open("cookies_report.csv") as csv_file:
     #### Pie chart same vs more cookies ####
     moreCookies = 0
     sameCookies = 0
+    lessCookies = 0
 
     # Column 2 is cookies_default, column 4 is cookies_accepted
     for row in csv_reader:
-        if row[2] == row[4] or row[4] < row[2]:
+        if row[2] == row[4]:
             sameCookies += 1
         elif row[4] > row[2]:
             moreCookies += 1
+        elif row[4] < row[2]:
+            lessCookies += 1
 
     print("moreCookies: ", moreCookies)
     print("sameCookies: ", sameCookies)
+    print("lessCookies: ", lessCookies)
 
-    cookies = [moreCookies, sameCookies]
-    nombres = ["More cookies", "Same Cookies"]
+    cookies = [moreCookies, sameCookies, lessCookies]
+    nombres = ["More cookies", "Same Cookies", "Less Cookies"]
     plt.pie(cookies, labels=nombres, autopct="%0.1f %%")
     plt.axis("equal")
     plt.title("Domains with the same cookies case Ninja Cookie plugin")
@@ -304,3 +308,49 @@ data_array = np.asarray(data).astype(int)
 data_array2 = np.asarray(data2).astype(int)
 
 cdf(data_array, data_array2)
+
+
+
+with open("cookies_report.csv") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+
+    #### How many cookies by saying yes ####
+    firstLine = 0
+    dictDomainCookies = {}
+
+    # Column 2 is cookies_default, column 1 is domain names
+    for row in csv_reader:
+        if firstLine == 0:
+            firstLine += 1
+        else:
+            if row[1] == "ups.com":
+                dictDomainCookies["ups.com"] = int(row[2])
+            elif row[1] == "dell.com":
+                dictDomainCookies["dell.com"] = int(row[2])
+            elif row[1] == "oracle.com":
+                dictDomainCookies["oracle.com"] = int(row[2])
+            elif row[1] == "cnn.com":
+                dictDomainCookies["cnn.com"] = int(row[2])
+            elif row[1] == "samsung.com":
+                dictDomainCookies["samsung.com"] = int(row[2])
+            elif row[1] == "microsoft.com":
+                dictDomainCookies["microsoft.com"] = int(row[2])
+            elif row[1] == "booking.com":
+                dictDomainCookies["booking.com"] = int(row[2])
+            elif row[1] == "ask.com":
+                dictDomainCookies["ask.com"] = int(row[2])
+            elif row[1] == "google.com":
+                dictDomainCookies["google.com"] = int(row[2])
+            elif row[1] == "amazon.com":
+                dictDomainCookies["amazon.com"] = int(row[2])
+
+    print("Dictionari cookies domains: ", dictDomainCookies)
+
+    plt.bar(range(len(dictDomainCookies)),dictDomainCookies.values(), align='center')
+    plt.xticks(range(len(dictDomainCookies)), list(dictDomainCookies.keys()))
+    
+    plt.ylabel('Number of cookies')
+    plt.xlabel('Domains names')
+    plt.title('Number cookies vs domains')
+
+    plt.show()

@@ -26,8 +26,8 @@ if __name__ == '__main__':
             print(f"ID: {domain['id']}\t{domain['name']}")
 
             '''
-            if domain['name'] == 'intuit.com':
-                header = db_manager.get_all_headers(db_ninja, domain['name'])
+            if domain['name'] == 'amazon.com':
+                header = db_manager.get_all_headers(db_geo, domain['name'])
                 print(header)
             '''
 
