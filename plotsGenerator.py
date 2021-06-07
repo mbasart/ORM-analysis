@@ -354,3 +354,79 @@ with open("cookies_report.csv") as csv_file:
     plt.title('Number cookies vs domains')
 
     plt.show()
+
+
+
+with open("cookies_report.csv") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+
+    firstLine = 0
+    mydict = {}
+    myDictPercentage = {}
+    myDictPercentageThird = {}
+    mydictThird = {}
+    mydictTotal = {}
+
+    #Colum 7 is location (countries) and column 6 is clicked and column 8 is first parties
+    for row in csv_reader:
+        if firstLine == 0:
+            firstLine += 1
+        else:
+            newStr = row[7].replace('[','')
+            newStr2 = newStr.replace(']','')
+            arrayCountry = eval('[' + newStr2 + ']')
+            newStrPart = row[8].replace('[','')
+            newStr2Part = newStrPart.replace(']','')
+            arrayPart = eval('[' + newStr2Part + ']')
+            #print(arrayCountry)
+            #print(row[8])
+            for i in range(len(arrayCountry)):
+                if row[6] == "False" and arrayPart[i] == True:
+                    mydict[arrayCountry[i]] = mydict.get(arrayCountry[i],0) + 1
+                    mydictTotal[arrayCountry[i]] = mydictTotal.get(arrayCountry[i],0) + 1
+                elif row[6] == "True" and arrayPart[i] == True:
+                    mydict[arrayCountry[i]] = mydict.get(arrayCountry[i],0) 
+                    mydictTotal[arrayCountry[i]] = mydictTotal.get(arrayCountry[i],0) + 1
+                elif row[6] == "False" and arrayPart[i] == False:
+                    mydictThird[arrayCountry[i]] = mydictThird.get(arrayCountry[i],0) + 1
+                    mydictTotal[arrayCountry[i]] = mydictTotal.get(arrayCountry[i],0) + 1
+                elif row[6] == "True" and arrayPart[i] == False:
+                    mydictThird[arrayCountry[i]] = mydictThird.get(arrayCountry[i],0)
+                    mydictTotal[arrayCountry[i]] = mydictTotal.get(arrayCountry[i],0) + 1
+                            
+    print(mydict)
+    print(mydictTotal)
+    print(mydictThird)
+
+    for x in mydictTotal.keys():
+        myDictPercentage.update({x:0})
+        myDictPercentageThird.update({x:0})
+
+    print(myDictPercentage)
+    print(myDictPercentageThird)
+
+    for x, y in mydict.items():
+        yTotal = mydictTotal[x]
+        percentFalse = (y/yTotal) * 100
+        myDictPercentage.update({x:percentFalse})
+
+    print(myDictPercentage)
+
+    for x, y in mydictThird.items():
+        yTotal = mydictTotal[x]
+        percentFalse = (y/yTotal) * 100
+        myDictPercentageThird.update({x:percentFalse})
+
+    print(myDictPercentageThird)
+
+    X_axis = np.arange(len(mydictTotal))
+    
+    plt.bar(X_axis - 0.2, myDictPercentage.values(), 0.4, label = 'First parties')
+    plt.bar(X_axis + 0.2, myDictPercentageThird.values(), 0.4, label = 'Third parties')
+    
+    plt.xticks(X_axis, mydictTotal.keys())
+    plt.xlabel("Country")
+    plt.ylabel("Percentatge of NOT accepted")
+    plt.title("Country vs acceptance")
+    plt.legend()
+    plt.show()

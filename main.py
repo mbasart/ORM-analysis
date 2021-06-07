@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    csv_header = ["domain_ID", "domain_name", "cookies_default", "cookies_dont", "cookies_ninja", "cookies_accepted", "clicked","location"]
+    csv_header = ["domain_ID", "domain_name", "cookies_default", "cookies_dont", "cookies_ninja", "cookies_accepted", "clicked","location","first_parties"]
     #csv_header = ["domain_ID", "domain_name", "cookies_default", "cookies_dont", "cookies_ninja"]
 
     db_orm, db_dont, db_ninja, db_click, db_geo = db_manager.get_dbs()
@@ -26,7 +26,7 @@ if __name__ == '__main__':
             print(f"ID: {domain['id']}\t{domain['name']}")
 
             '''
-            if domain['name'] == 'amazon.com':
+            if domain['name'] == 'google.com':
                 header = db_manager.get_all_headers(db_geo, domain['name'])
                 print(header)
             '''
@@ -43,9 +43,11 @@ if __name__ == '__main__':
                 cookies_accepted = db_manager.get_count_cookies(db_click, domain["name"])
                 domain_clicked = db_manager.get_clicked(db_click, domain["name"])
                 domainLoc = db_manager.get_geoLocationDom(db_geo,domain["name"])
-                print(domainLoc)
+                #print(domainLoc)
+                domainLocHead = db_manager.get_geoLocationDomHead(db_geo, domain["name"])
+                #print(domainLocHead)
 
-                csv_writer.writerow([domain["id"], domain["name"], cookies_default, cookies_dont, cookies_ninja, cookies_accepted, domain_clicked, domainLoc])
+                csv_writer.writerow([domain["id"], domain["name"], cookies_default, cookies_dont, cookies_ninja, cookies_accepted, domain_clicked, domainLoc, domainLocHead])
                 #csv_writer.writerow([domain["id"], domain["name"], cookies_default, cookies_dont, cookies_ninja])
 
             if domain["id"] == args.limit:

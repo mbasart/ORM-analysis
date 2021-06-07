@@ -92,6 +92,10 @@ def get_count_cookies(db, domain):
             if request["headers"] is not None and ((request["headers"].find("set-cookie") != -1) or (request["headers"].find("Set-Cookie") != -1)):
                 total_cookies += len(request["headers"].split("set-cookie"))-1
                 total_cookies += len(request["headers"].split("Set-Cookie"))-1
+
+                #if request["headers"].find("domain") != -1:
+                    #print(request["headers"])
+
             '''
             try:
                 if "set-cookie" not in request["headers"] and "Set-Cookie" not in request["headers"]:
@@ -161,7 +165,7 @@ def get_domains(db):
 def get_geoLocationDom(db,domain):
     
     cursor = db.cursor(MySQLdb.cursors.DictCursor)
-    query = f"SELECT DISTINCT location.country_code " \
+    query = f"SELECT DISTINCT location.country_code, url.headers " \
             f"FROM url JOIN location " \
             f"ON url.id = location.id " \
             f"WHERE url.url LIKE '%{domain}%'"
@@ -202,6 +206,37 @@ def get_geoLocation(db,domain):
         result = {}
         for key in row.keys():
             result[key] = row[key]
+            if row[key] == "NULL":
+                result[key] = None
+        results.append(result)
+
+    cursor.close()
+
+    return results
+
+
+def get_geoLocationDomHead(db,domain):
+    
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
+    query = f"SELECT DISTINCT location.country_code, url.headers " \
+            f"FROM url JOIN location " \
+            f"ON url.id = location.id " \
+            f"WHERE url.url LIKE '%{domain}%'"
+
+    cursor.execute(query)
+
+    results = []
+    for row in cursor.fetchall():
+        result = {}
+        for key in row.keys():
+            #print(key)
+            #print(row["country_code"])
+            #result = row["country_code"]
+            if row["headers"].find(domain) != -1:
+                result = True #It is first party domain
+            else:
+                result = False #It is third party domain
+            #result[key] = row[key]
             if row[key] == "NULL":
                 result[key] = None
         results.append(result)
