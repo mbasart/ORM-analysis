@@ -4,13 +4,14 @@ import ast
 
 def get_dbs():
 
-    db_orm = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORM")
+    #db_orm = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORM")
     db_dont = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORMdontCare")
     db_ninja = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORMninja")
     db_click = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORMclick")
     db_geo = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORMgeo")
+    db_pablo = MySQLdb.connect(host="127.0.0.1", port=3306, user="toor", passwd="pinacolada", db="ORMpablo")
 
-    return db_orm, db_dont, db_ninja, db_click, db_geo
+    return db_dont, db_ninja, db_click, db_geo, db_pablo
 
 
 def get_headers_cookies(db, domain):
@@ -117,7 +118,7 @@ def get_count_cookies(db, domain):
 def get_clicked(db, domain):
     cursor = db.cursor(MySQLdb.cursors.DictCursor)
     query = f"SELECT clicked " \
-            f"FROM ORMclick.domain " \
+            f"FROM domain " \
             f"WHERE name='{domain}'"
 
     cursor.execute(query)

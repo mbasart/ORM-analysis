@@ -53,7 +53,7 @@ Currently, 3 charts are generated:
 
 This part of the project will read the previously generated csv file and generate meaningful statistics using python language.
 
-## Executing
+### Executing
 
 To generate the plots execute `python3 plotsGenerator.py`. 
 
